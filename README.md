@@ -1,7 +1,8 @@
 # 使用效果
 
-![使用效果图——未输入](https://github.com/CharlieJiang/VerifyCodeInputView/blob/main/screenshot/UseCase_not_input.jpg)
-![使用效果图——已输入](/screenshot/UseCase_input.jpg)
+<img src="https://github.com/CharlieJiang/VerifyCodeInputView/blob/main/screenshot/UseCase_not_input.jpg" alt="使用效果图——未输入" width="720" height="1280" align="middle"/>
+<img src="https://github.com/CharlieJiang/VerifyCodeInputView/blob/main/screenshot/UseCase_input.jpg" alt="使用效果图——已输入" width="720" height="1280" align="middle"/>
+
 
 # VerifyCodeInputView
 
