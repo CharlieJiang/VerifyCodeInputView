@@ -16,11 +16,11 @@
         android:layout_marginTop="20dp"
         android:text="默认样式" />
 
-    <com.cocoas.verifycodeinputview.VerifyCodeInputView
+    <com.cocoas.view.VerifyCodeInputView
         android:id="@+id/main_verifyCodeInputView_default"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="number"></com.cocoas.verifycodeinputview.VerifyCodeInputView>
+        android:inputType="number"></com.cocoas.view.VerifyCodeInputView>
 
     <!--自适应样式-->
     <TextView
@@ -30,12 +30,12 @@
         android:layout_marginTop="30dp"
         android:text="自适应样式" />
 
-    <com.cocoas.verifycodeinputview.VerifyCodeInputView
+    <com.cocoas.view.VerifyCodeInputView
         android:id="@+id/main_verifyCodeInputView_autoFit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:autoFit="true"
-        android:inputType="number"></com.cocoas.verifycodeinputview.VerifyCodeInputView>
+        android:inputType="number"></com.cocoas.view.VerifyCodeInputView>
 
     <!--自定义验证码数量-->
     <TextView
@@ -45,12 +45,12 @@
         android:layout_marginTop="30dp"
         android:text="自定义验证码数量为4" />
 
-    <com.cocoas.verifycodeinputview.VerifyCodeInputView
+    <com.cocoas.view.VerifyCodeInputView
         android:id="@+id/main_verifyCodeInputView_customCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="number"
-        app:boxCount="4"></com.cocoas.verifycodeinputview.VerifyCodeInputView>
+        app:boxCount="4"></com.cocoas.view.VerifyCodeInputView>
 
     <!--自定义输入框宽高-->
     <TextView
@@ -60,13 +60,13 @@
         android:layout_marginTop="30dp"
         android:text="自定义输入框宽高" />
 
-    <com.cocoas.verifycodeinputview.VerifyCodeInputView
+    <com.cocoas.view.VerifyCodeInputView
         android:id="@+id/main_verifyCodeInputView_customSize"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="number"
         app:boxHeight="30dp"
-        app:boxWidth="30dp"></com.cocoas.verifycodeinputview.VerifyCodeInputView>
+        app:boxWidth="30dp"></com.cocoas.view.VerifyCodeInputView>
 
     <!--自定义输入框边框的宽度、颜色-->
     <TextView
@@ -76,7 +76,7 @@
         android:layout_marginTop="30dp"
         android:text="自定义输入框边框的宽度、颜色" />
 
-    <com.cocoas.verifycodeinputview.VerifyCodeInputView
+    <com.cocoas.view.VerifyCodeInputView
         android:id="@+id/main_verifyCodeInputView_customBorderSizeColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -84,7 +84,7 @@
         app:boxBorderHeight="2dp"
         app:boxBorderColorNormal="@android:color/black"
         app:boxBorderColorFocused="@android:color/holo_red_dark"
-        ></com.cocoas.verifycodeinputview.VerifyCodeInputView>
+        ></com.cocoas.view.VerifyCodeInputView>
 
     <!--多种自定义属性-->
     <TextView
@@ -94,18 +94,19 @@
         android:layout_marginTop="30dp"
         android:text="多种自定义属性" />
 
-    <com.cocoas.verifycodeinputview.VerifyCodeInputView
+    <com.cocoas.view.VerifyCodeInputView
         android:id="@+id/main_verifyCodeInputView_customMulti"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="number"
         app:autoFit="true"
         app:boxCount="4"
+        app:boxSpacing="10dp"
         app:boxHeight="30dp"
         app:boxWidth="30dp"
         app:boxBorderHeight="2dp"
         app:boxBorderColorNormal="@android:color/black"
         app:boxBorderColorFocused="@android:color/holo_red_dark"
-        ></com.cocoas.verifycodeinputview.VerifyCodeInputView>
+        ></com.cocoas.view.VerifyCodeInputView>
 
 </LinearLayout>
