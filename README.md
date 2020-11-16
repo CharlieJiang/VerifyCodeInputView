@@ -1,7 +1,7 @@
 # 使用效果
 
-![使用效果图——未输入](/screenshot/自定义验证码输入框使用示例1.jpg)
-![使用效果图——已输入](/screenshot/自定义验证码输入框使用示例2.jpg)
+![使用效果图——未输入](https://github.com/CharlieJiang/VerifyCodeInputView/blob/main/screenshot/UseCase_not_input.jpg)
+![使用效果图——已输入](/screenshot/UseCase_input.jpg)
 
 # VerifyCodeInputView
 
