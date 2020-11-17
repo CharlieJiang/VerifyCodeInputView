@@ -38,19 +38,19 @@ implementation ("com.github.CharlieJiang:VerifyCodeInputView:v1.0")
     </com.cocoas.view.VerifyCodeInputView>
 ```
 # 属性说明
-1. boxWidth、boxHeight<br/>
+1. **boxWidth、boxHeight**<br/>
 > 单个验证码输入框的宽高（暂时只支持宽高相等的设置）  
 
-2. boxSpacing<br/>
+2. **boxSpacing**<br/>
 > 单个验证码输入框间的间距  
 
-3. boxCount<br/>
+3. **boxCount**<br/>
 > 验证码位数
-4. boxBorderHeight<br/>
+4. **boxBorderHeight**<br/>
 > 单个验证码输入框的边框高度
-5. boxBorderColorNormal<br/>
+5. **boxBorderColorNormal**<br/>
 > 单个验证码输入框边框的默认颜色
-6. boxBorderColorFocused<br/>
+6. **boxBorderColorFocused**<br/>
 > 单个验证码输入框边框的高亮颜色
-7. autoFit<br/>
+7. **autoFit**<br/>
 > 设置单个验证码输入框的宽高是否根据父布局宽度自适应
