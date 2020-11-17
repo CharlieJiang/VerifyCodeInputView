@@ -23,7 +23,7 @@ allprojects {
     }
 }
 ```
-* 添加项目依赖
+* 添加项目依赖<br/>
 在需要调用的module的build.gradle中添加依赖：
 ```css
 implementation ("com.github.CharlieJiang:VerifyCodeInputView:v1.0")
@@ -37,3 +37,18 @@ implementation ("com.github.CharlieJiang:VerifyCodeInputView:v1.0")
         android:inputType="number">
     </com.cocoas.view.VerifyCodeInputView>
 ```
+# 属性说明
+1. boxWidth、boxHeight
+单个验证码输入框的宽高（暂时只支持宽高相等的设置）
+2. boxSpacing
+单个验证码输入框间的间距
+3. boxCount
+验证码位数
+4. boxBorderHeight
+单个验证码输入框的边框高度
+5. boxBorderColorNormal
+单个验证码输入框边框的默认颜色
+6.boxBorderColorFocused
+单个验证码输入框边框的高亮颜色
+7. autoFit
+设置单个验证码输入框的宽高是否根据父布局宽度自适应
