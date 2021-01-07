@@ -27,7 +27,7 @@ allprojects {
 * 添加项目依赖<br/>
 在需要调用的module的build.gradle中添加依赖：
 ```css
-implementation ("com.github.CharlieJiang:VerifyCodeInputView:v1.0")
+implementation ("com.github.CharlieJiang:VerifyCodeInputView:v1.1")
 ```
 * 在xml布局中引用
 ```xml
@@ -40,10 +40,10 @@ implementation ("com.github.CharlieJiang:VerifyCodeInputView:v1.0")
 ```
 # 属性说明
 1. **boxWidth、boxHeight**<br/>
-> 单个验证码输入框的宽高（暂时只支持宽高相等的设置）  
+> 单个验证码输入框的宽高（暂时只支持宽高相等的设置，当宽高值不同时，取两者中较小值）  
 
 2. **boxSpacing**<br/>
-> 单个验证码输入框间的间距  
+> 单个验证码输入框间的间距（暂时只支持宽高相等的设置，当宽高值不同时，取两者中较小值） 
 
 3. **boxCount**<br/>
 > 验证码位数
@@ -54,7 +54,8 @@ implementation ("com.github.CharlieJiang:VerifyCodeInputView:v1.0")
 6. **boxBorderColorFocused**<br/>
 > 单个验证码输入框边框的高亮颜色
 7. **autoFit**<br/>
-> 设置单个验证码输入框的宽高是否根据父布局宽度自适应  
+> 设置单个验证码输入框的宽高是否根据父布局宽度自适应。   
+注意：此属性需要与android:layout_width="match_parent"属性一起使用，否则可能无效。
 8. **boxType**<br/>
 > 设置输入框类型，类型值及说明如下：
 
