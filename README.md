@@ -27,7 +27,7 @@ allprojects {
 * 添加项目依赖<br/>
 在需要调用的module的build.gradle中添加依赖：
 ```css
-implementation ("com.github.CharlieJiang:VerifyCodeInputView:v1.1")
+implementation ("com.github.CharlieJiang:VerifyCodeInputView:v1.1.1")
 ```
 * 在xml布局中引用
 ```xml
