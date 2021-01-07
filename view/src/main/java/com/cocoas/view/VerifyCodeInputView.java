@@ -25,25 +25,34 @@ import androidx.appcompat.widget.AppCompatEditText;
  */
 public class VerifyCodeInputView extends AppCompatEditText {
 
-    //输入框宽度
+    private static final String TAG = "VerifyCodeInputView";
+    /** 输入框类型常量 */
+    private interface BoxType{
+        int LINE = 0;// 底部横线输入框
+        int RECT = 1;// 矩形输入框
+    }
+
+    /*自定义属性↓↓↓*/
+    // 输入框宽度
     private int boxWidth = 128;
-    //输入框高度
+    // 输入框高度
     private int boxHeight = 128;
-    //输入框边框高度
-    private int boxBorderHeight = 4;
-    //输入框间距
+    // 输入框边框高度
+    private int boxBorderHeight = 2;
+    // 输入框间距
     private int boxSpacing = 30;
-    //输入框数量：默认6个
+    // 输入框数量：默认6个
     private int boxCount = 6;
-    //输入框边框默认颜色
+    // 输入框边框默认颜色
     private int boxBorderColorNormal = getResources().getColor(android.R.color.darker_gray);
-    //输入框边框高亮颜色
+    // 输入框边框高亮颜色
     private int boxBorderColorFocused = getResources().getColor(android.R.color.holo_blue_dark);
-    //输入框是否自动适应父布局宽度：如果不自动适应，则以设定的宽高为准
-    private boolean autoFit = false;
-    //输入框宽度与输入框间间距的比例
-    private int spacingRate = 3;
-    //输入框尺寸
+    // 输入框是否自动适应父布局宽度：如果不自动适应，则以设定的宽高为准
+    private boolean autoFit;
+    // 输入框类型
+    private int boxType = BoxType.LINE;
+    /*自定义属性↑↑↑*/
+    //输入框Rect
     private Rect boxRect = new Rect();
     //输入完成监听
     private OnInputFinishedListener onInputFinishedListener;
@@ -56,25 +65,27 @@ public class VerifyCodeInputView extends AppCompatEditText {
         int indexCount = typedArray.getIndexCount();
         //遍历获取自定义属性的值
         for (int i = 0; i < indexCount; i++) {
-            int index = typedArray.getIndex(i);
-            if (index == R.styleable.VerifyCodeInputViewStyle_boxWidth) {
-                this.boxWidth = (int) typedArray.getDimension(index, boxWidth);
-            } else if (index == R.styleable.VerifyCodeInputViewStyle_boxHeight) {
-                this.boxHeight = (int) typedArray.getDimension(index, boxHeight);
-            } else if (index == R.styleable.VerifyCodeInputViewStyle_boxBorderHeight) {
-                this.boxBorderHeight = (int) typedArray.getDimension(index, boxBorderHeight);
-            } else if (index == R.styleable.VerifyCodeInputViewStyle_boxSpacing) {
-                this.boxSpacing = (int) typedArray.getDimension(index, boxSpacing);
-            } else if (index == R.styleable.VerifyCodeInputViewStyle_boxCount) {
-                this.boxCount = typedArray.getInt(index, boxCount);
-            } else if (index == R.styleable.VerifyCodeInputViewStyle_boxBorderColorNormal) {
-                this.boxBorderColorNormal = typedArray.getColor(index,
+            int attr = typedArray.getIndex(i);
+            if (attr == R.styleable.VerifyCodeInputViewStyle_boxWidth) {
+                this.boxWidth = (int) typedArray.getDimension(attr, boxWidth);
+            } else if (attr == R.styleable.VerifyCodeInputViewStyle_boxHeight) {
+                this.boxHeight = (int) typedArray.getDimension(attr, boxHeight);
+            } else if (attr == R.styleable.VerifyCodeInputViewStyle_boxBorderHeight) {
+                this.boxBorderHeight = (int) typedArray.getDimension(attr, boxBorderHeight);
+            } else if (attr == R.styleable.VerifyCodeInputViewStyle_boxSpacing) {
+                this.boxSpacing = (int) typedArray.getDimension(attr, boxSpacing);
+            } else if (attr == R.styleable.VerifyCodeInputViewStyle_boxCount) {
+                this.boxCount = typedArray.getInt(attr, boxCount);
+            } else if (attr == R.styleable.VerifyCodeInputViewStyle_boxBorderColorNormal) {
+                this.boxBorderColorNormal = typedArray.getColor(attr,
                         getResources().getColor(android.R.color.darker_gray));
-            } else if (index == R.styleable.VerifyCodeInputViewStyle_boxBorderColorFocused) {
-                this.boxBorderColorFocused = typedArray.getColor(index,
+            } else if (attr == R.styleable.VerifyCodeInputViewStyle_boxBorderColorFocused) {
+                this.boxBorderColorFocused = typedArray.getColor(attr,
                         getResources().getColor(android.R.color.holo_blue_dark));
-            } else if (index == R.styleable.VerifyCodeInputViewStyle_autoFit) {
-                this.autoFit = typedArray.getBoolean(index, false);
+            } else if (attr == R.styleable.VerifyCodeInputViewStyle_autoFit) {
+                this.autoFit = typedArray.getBoolean(attr, false);
+            } else if (attr == R.styleable.VerifyCodeInputViewStyle_boxType) {
+                this.boxType = typedArray.getInt(attr, BoxType.LINE);
             }
         }
         //使用完TypedArray及时回收，以供其他模块使用
@@ -93,10 +104,11 @@ public class VerifyCodeInputView extends AppCompatEditText {
      * 自动计算输入框宽高和间距
      */
     private void calculateAttrs(int width) {
-        boxSpacing = width / ((spacingRate + 1) * boxCount - 1);
+        // 计算输入框间间距
+        boxSpacing = (width - (boxBorderHeight + boxWidth) * boxCount) / ( boxCount - 1);
 //		Logger.d("getMeasuredWidth()=" + width);
-        boxWidth = boxSpacing * spacingRate;
-        boxHeight = boxWidth;
+//        boxWidth = boxSpacing * spacingRate;
+//        boxHeight = boxWidth;
 //		Logger.w("boxWidth=" + boxWidth + ",boxHeight=" + boxHeight + ",boxSpacing=" + boxSpacing);
     }
 
@@ -125,14 +137,19 @@ public class VerifyCodeInputView extends AppCompatEditText {
         //输入框当前的尺寸与通过自定义属性设置的尺寸进行比较
         int width = getMeasuredWidth();
         int height = getMeasuredHeight();
-//		Logger.w("onMeasure+(" + width + "," + height + ")");
         int widthSpecModel = MeasureSpec.getMode(widthMeasureSpec);
         int heightSpecModel = MeasureSpec.getMode(heightMeasureSpec);
-        //比较输入框当前的高度是否符合设定的高度boxHeight
+        // 比较输入框默认的高度（根据字体大小等自动计算的高度）是否符合设定的高度boxHeight
+        // 最终的高度不能小于输入框默认的高度，以防止输入的数字显示有问题
         if (height < boxHeight) {
             height = boxHeight;
+        }else{
+            // 重置输入框的高度为默认高度
+            boxHeight = height;
         }
-        int actualWidth = boxWidth * boxCount + boxSpacing * (boxCount - 1);
+        // 设置单个输入框的宽高相同
+        boxWidth = boxHeight;
+        int actualWidth = (boxWidth + boxBorderHeight) * boxCount + boxSpacing * (boxCount - 1);
         if (widthSpecModel == MeasureSpec.AT_MOST) {
             width = actualWidth;
         }
@@ -158,35 +175,118 @@ public class VerifyCodeInputView extends AppCompatEditText {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        // 重新绘制输入框
-        drawBox(canvas);
+        // 重新绘制输入框：根据设定的输入框类型属性进行绘制
+        switch (boxType){
+            case BoxType.RECT:// 矩形输入框
+                drawBox(canvas);
+                break;
+            case BoxType.LINE:// 底部横线输入框
+            default:
+                drawLineBox(canvas);
+                break;
+        }
+        // 绘制数字
         drawNumber(canvas);
+//        drawCenterLine(canvas);
     }
 
     /**
-     * 绘制单个数字的输入框
-     *
+     * 绘制中轴线用于校正数字的位置
      * @param canvas
      */
-    private void drawBox(Canvas canvas) {
-        //单个数字输入框的坐标
-        boxRect.left = 0;
-        boxRect.top = boxHeight - boxBorderHeight;
-        boxRect.right = boxWidth;
-        boxRect.bottom = boxHeight;
-        //输入框画笔
+    private void drawCenterLine(Canvas canvas){
+        //获取当前画布保存的状态
+        int saveCount = canvas.getSaveCount();
+        //画布归位
+        canvas.translate(0, 0);
+        //画笔
+        Paint linePaint = new Paint();
+        linePaint.setColor(Color.RED);
+        // 画线段
+        canvas.drawLine(0,boxHeight/2,canvas.getWidth(),boxHeight/2,linePaint);
+        //画布还原
+        canvas.restoreToCount(saveCount);
+    }
+
+    /**
+     * 绘制只有底部横线的输入框
+     * @param canvas
+     */
+    private void drawLineBox(Canvas canvas){
+        // 计算线段坐标（需要考虑画笔的宽度）
+        float startX = boxBorderHeight/2;
+        float startY = boxHeight - boxBorderHeight/2;
+        float stopX = startX + boxWidth;
+        float stopY = startY;
+        /*创建输入框画笔*/
         Paint boxPaint = new Paint();
         //普通输入框颜色
         boxPaint.setColor(boxBorderColorNormal);
+        // 设置画笔样式：描边
+        boxPaint.setStyle(Paint.Style.STROKE);
+        // 设置画笔宽度
+        boxPaint.setStrokeWidth(boxBorderHeight);
         //当前画布保存的状态
         int canvasSaveCount = canvas.getSaveCount();
         //保存画布
         canvas.save();
-        //遍历绘制所有数字输入框
+        /*遍历绘制所有数字输入框*/
+        for (int i = 0; i < boxCount; i++) {
+            canvas.drawLine(startX,startY,stopX,stopY, boxPaint);
+            //计算下一个数字输入框的位置
+            int nextBoxLeft = boxWidth + boxSpacing + boxBorderHeight;
+            //保存画布
+            canvas.save();
+            //画布平移到下一个绘制输入框的位置
+            canvas.translate(nextBoxLeft, 0);
+        }
+        // 还原画布状态
+        canvas.restoreToCount(canvasSaveCount);
+        // 画布归位
+        canvas.translate(0, 0);
+        /*绘制高亮显示数字输入框*/
+        // 获取待输入数字输入框的序号
+        int boxIndex = Math.max(0, getEditableText().length());
+        // 输入完所有数字后不再绘制高亮的输入框
+        if (boxIndex < boxCount) {
+            // 计算此输入框的绘制位置
+            startX = boxBorderHeight/2 + (boxWidth + boxBorderHeight + boxSpacing) * boxIndex;
+            stopX = startX + boxWidth;
+            // 高亮显示输入框的颜色
+            boxPaint.setColor(boxBorderColorFocused);
+            // 绘制高亮输入框
+            canvas.drawLine(startX,startY,stopX,stopY, boxPaint);
+        }
+    }
+
+    /**
+     * 绘制矩形输入框
+     *
+     * @param canvas
+     */
+    private void drawBox(Canvas canvas) {
+        // 计算单个数字输入框的坐标（绘制矩形Rect要为上下左右四条边预留画笔的一半的宽度）
+        boxRect.left = boxBorderHeight/2;
+        boxRect.top = boxBorderHeight/2;
+        boxRect.right = boxWidth + boxRect.left;
+        boxRect.bottom = boxHeight - boxRect.top;
+         /*创建输入框画笔*/
+        Paint boxPaint = new Paint();
+        //普通输入框颜色
+        boxPaint.setColor(boxBorderColorNormal);
+        // 设置画笔样式：描边
+        boxPaint.setStyle(Paint.Style.STROKE);
+        // 设置画笔宽度
+        boxPaint.setStrokeWidth(boxBorderHeight);
+        //当前画布保存的状态
+        int canvasSaveCount = canvas.getSaveCount();
+        //保存画布
+        canvas.save();
+        /*遍历绘制所有数字输入框*/
         for (int i = 0; i < boxCount; i++) {
             canvas.drawRect(boxRect, boxPaint);
             //计算下一个数字输入框的位置
-            int nextBoxLeft = boxRect.right + boxSpacing;
+            int nextBoxLeft = boxWidth + boxSpacing + boxBorderHeight;
             //保存画布
             canvas.save();
             //画布平移到下一个绘制输入框的位置
@@ -196,13 +296,13 @@ public class VerifyCodeInputView extends AppCompatEditText {
         canvas.restoreToCount(canvasSaveCount);
         //画布归位
         canvas.translate(0, 0);
-        //绘制高亮显示数字输入框
+        /*绘制高亮显示数字输入框*/
         //获取待输入数字输入框的序号
         int boxIndex = Math.max(0, getEditableText().length());
         //输入完所有数字后不再绘制高亮的输入框
         if (boxIndex < boxCount) {
             //计算此输入框的绘制位置
-            boxRect.left = (boxWidth + boxSpacing) * boxIndex;
+            boxRect.left =  + boxBorderHeight/2 + (boxWidth + boxSpacing + boxBorderHeight) * boxIndex;
             boxRect.right = boxRect.left + boxWidth;
             //高亮显示输入框的颜色
             boxPaint.setColor(boxBorderColorFocused);
@@ -227,14 +327,16 @@ public class VerifyCodeInputView extends AppCompatEditText {
         TextPaint textPaint = getPaint();
 //		textPaint.setTextSize(txtSize);
         textPaint.setColor(getCurrentTextColor());
+        Rect numberBoundsRect = new Rect();
         //遍历绘制数字
         for (int i = 0; i < numberCount; i++) {
             String numberText = String.valueOf(getEditableText().charAt(i));
             //获取文本大小(重用输入框的Rect)
-            textPaint.getTextBounds(numberText, 0, 1, boxRect);
+            textPaint.getTextBounds(numberText, 0, 1, numberBoundsRect);
             //计算数字的绘制位置
-            int x = boxWidth / 2 - boxRect.centerX() + (boxWidth + boxSpacing) * i;
-            int y = canvas.getHeight() / 2 + boxRect.centerY() / 2;
+            int x = (boxWidth + boxBorderHeight) / 2 - Math.abs(numberBoundsRect.centerX()) + (boxWidth + boxSpacing + boxBorderHeight) * i;
+            int y = (boxHeight + numberBoundsRect.height())/2;
+
             //绘制数字
             canvas.drawText(numberText, x, y, textPaint);
         }

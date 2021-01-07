@@ -2,13 +2,17 @@
 <resources>
     <!--  自定义验证码输入框相关属性  -->
     <declare-styleable name="VerifyCodeInputViewStyle">
-        <attr name="boxWidth" format="dimension"/>
-        <attr name="boxHeight" format="dimension"/>
-        <attr name="boxSpacing" format="dimension"/>
-        <attr name="boxBorderHeight" format="dimension"/>
-        <attr name="boxCount" format="integer"/>
-        <attr name="boxBorderColorNormal" format="color"/>
-        <attr name="boxBorderColorFocused" format="color"/>
-        <attr name="autoFit" format="boolean"/>
+        <attr name="boxWidth" format="dimension"/>  //  单个数字输入框的宽度
+        <attr name="boxHeight" format="dimension"/> //  单个数字输入框的高度
+        <attr name="boxSpacing" format="dimension"/>    //  单个数字输入框间的间距
+        <attr name="boxBorderHeight" format="dimension"/>   //  单个数字输入框的边框高度
+        <attr name="boxCount" format="integer"/>    //  数字个数
+        <attr name="boxBorderColorNormal" format="color"/>  //  单个数字输入框边框的默认颜色
+        <attr name="boxBorderColorFocused" format="color"/> //  单个数字输入框边框的高亮颜色
+        <attr name="autoFit" format="boolean"/> //  输入框宽度是否自动适应父布局宽度
+        <attr name="boxType">// 输入框类型属性
+            <enum name="line" value="0"/>
+            <enum name="rect" value="1"/>
+        </attr>
     </declare-styleable>
 </resources>
