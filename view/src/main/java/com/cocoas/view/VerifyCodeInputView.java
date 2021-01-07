@@ -48,6 +48,7 @@ public class VerifyCodeInputView extends AppCompatEditText {
     // 输入框边框高亮颜色
     private int boxBorderColorFocused = getResources().getColor(android.R.color.holo_blue_dark);
     // 输入框是否自动适应父布局宽度：如果不自动适应，则以设定的宽高为准
+    // 该属性需要配合android:layout_width="match_parent"属性一起使用，否则可能无效
     private boolean autoFit;
     // 输入框类型
     private int boxType = BoxType.LINE;
@@ -56,6 +57,8 @@ public class VerifyCodeInputView extends AppCompatEditText {
     private Rect boxRect = new Rect();
     //输入完成监听
     private OnInputFinishedListener onInputFinishedListener;
+    // 输入框中间坐标Y轴高度
+    int centerY = 0;
 
     public VerifyCodeInputView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -104,11 +107,12 @@ public class VerifyCodeInputView extends AppCompatEditText {
      * 自动计算输入框宽高和间距
      */
     private void calculateAttrs(int width) {
-        // 计算输入框间间距
-        boxSpacing = (width - (boxBorderHeight + boxWidth) * boxCount) / ( boxCount - 1);
+//        // 计算输入框间间距
+//        boxSpacing = (width - (boxBorderHeight + boxWidth) * boxCount) / ( boxCount - 1);
 //		Logger.d("getMeasuredWidth()=" + width);
-//        boxWidth = boxSpacing * spacingRate;
-//        boxHeight = boxWidth;
+        // 计算输入框宽度
+        boxWidth = (width - boxSpacing * (boxCount - 1) - boxBorderHeight * boxCount) / boxCount;
+        boxHeight = boxWidth;
 //		Logger.w("boxWidth=" + boxWidth + ",boxHeight=" + boxHeight + ",boxSpacing=" + boxSpacing);
     }
 
@@ -140,15 +144,20 @@ public class VerifyCodeInputView extends AppCompatEditText {
         int widthSpecModel = MeasureSpec.getMode(widthMeasureSpec);
         int heightSpecModel = MeasureSpec.getMode(heightMeasureSpec);
         // 比较输入框默认的高度（根据字体大小等自动计算的高度）是否符合设定的高度boxHeight
-        // 最终的高度不能小于输入框默认的高度，以防止输入的数字显示有问题
         if (height < boxHeight) {
             height = boxHeight;
-        }else{
-            // 重置输入框的高度为默认高度
-            boxHeight = height;
         }
-        // 设置单个输入框的宽高相同
-        boxWidth = boxHeight;
+//        else{
+//            // 重置输入框的高度为默认高度
+//            boxHeight = height;
+//        }
+        // 设置单个输入框的宽高相同：取宽高中最小值
+        if(boxWidth < boxHeight){
+            boxHeight = boxWidth;
+        }else{
+            boxWidth = boxHeight;
+        }
+//        boxWidth = boxHeight;
         int actualWidth = (boxWidth + boxBorderHeight) * boxCount + boxSpacing * (boxCount - 1);
         if (widthSpecModel == MeasureSpec.AT_MOST) {
             width = actualWidth;
@@ -175,10 +184,12 @@ public class VerifyCodeInputView extends AppCompatEditText {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        // 输入框中间坐标Y轴高度
+        centerY = canvas.getHeight()/2;
         // 重新绘制输入框：根据设定的输入框类型属性进行绘制
         switch (boxType){
             case BoxType.RECT:// 矩形输入框
-                drawBox(canvas);
+                drawRectBox(canvas);
                 break;
             case BoxType.LINE:// 底部横线输入框
             default:
@@ -203,7 +214,7 @@ public class VerifyCodeInputView extends AppCompatEditText {
         Paint linePaint = new Paint();
         linePaint.setColor(Color.RED);
         // 画线段
-        canvas.drawLine(0,boxHeight/2,canvas.getWidth(),boxHeight/2,linePaint);
+        canvas.drawLine(0,canvas.getHeight()/2,canvas.getWidth(),canvas.getHeight()/2,linePaint);
         //画布还原
         canvas.restoreToCount(saveCount);
     }
@@ -215,7 +226,7 @@ public class VerifyCodeInputView extends AppCompatEditText {
     private void drawLineBox(Canvas canvas){
         // 计算线段坐标（需要考虑画笔的宽度）
         float startX = boxBorderHeight/2;
-        float startY = boxHeight - boxBorderHeight/2;
+        float startY = centerY + boxHeight/2 - boxBorderHeight/2;
         float stopX = startX + boxWidth;
         float stopY = startY;
         /*创建输入框画笔*/
@@ -264,12 +275,12 @@ public class VerifyCodeInputView extends AppCompatEditText {
      *
      * @param canvas
      */
-    private void drawBox(Canvas canvas) {
-        // 计算单个数字输入框的坐标（绘制矩形Rect要为上下左右四条边预留画笔的一半的宽度）
+    private void drawRectBox(Canvas canvas) {
+        // 计算单个数字输入框的坐标:输入框垂直居中
         boxRect.left = boxBorderHeight/2;
-        boxRect.top = boxBorderHeight/2;
+        boxRect.top = centerY - boxHeight/2 + boxBorderHeight/2;
         boxRect.right = boxWidth + boxRect.left;
-        boxRect.bottom = boxHeight - boxRect.top;
+        boxRect.bottom = centerY + boxHeight/2 - boxBorderHeight/2;
          /*创建输入框画笔*/
         Paint boxPaint = new Paint();
         //普通输入框颜色
@@ -335,8 +346,7 @@ public class VerifyCodeInputView extends AppCompatEditText {
             textPaint.getTextBounds(numberText, 0, 1, numberBoundsRect);
             //计算数字的绘制位置
             int x = (boxWidth + boxBorderHeight) / 2 - Math.abs(numberBoundsRect.centerX()) + (boxWidth + boxSpacing + boxBorderHeight) * i;
-            int y = (boxHeight + numberBoundsRect.height())/2;
-
+            int y = centerY + numberBoundsRect.height()/2;
             //绘制数字
             canvas.drawText(numberText, x, y, textPaint);
         }
