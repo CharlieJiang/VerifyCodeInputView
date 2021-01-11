@@ -5,15 +5,15 @@
 目前支持三种输入框类型：线形输入框、矩形输入框、圆形输入框。具体效果如下：
 
 # 使用效果
-* 线形输入框
+* **线形输入框**
 
 <img src="https://github.com/CharlieJiang/VerifyCodeInputView/blob/main/screenshot/line.jpg" alt="线形输入框" width="720" height="1280" align="middle"/>
 
-* 矩形输入框
+* **矩形输入框**
 
 <img src="https://github.com/CharlieJiang/VerifyCodeInputView/blob/main/screenshot/rect.jpg" alt="矩形输入框" width="720" height="1280" align="middle"/>
 
-* 圆形输入框
+* **圆形输入框**
 
 <img src="https://github.com/CharlieJiang/VerifyCodeInputView/blob/main/screenshot/circle.jpg" alt="圆形输入框" width="720" height="1280" align="middle"/>
 
@@ -36,11 +36,20 @@ implementation ("com.github.CharlieJiang:VerifyCodeInputView:v1.1.2")
 * 在xml布局中引用
 ```xml
     <com.cocoas.view.VerifyCodeInputView
-        android:id="@+id/main_verifyCodeInputView_default"
+        android:id="@+id/main_verifyCodeInputView_customMulti"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="number">
-    </com.cocoas.view.VerifyCodeInputView>
+        android:inputType="number"
+        app:autoFit="true"
+        app:boxCount="4"
+        app:boxSpacing="10dp"
+        app:boxHeight="60dp"
+        app:boxWidth="60dp"
+        app:boxBorderHeight="3dp"
+        app:boxBorderColorNormal="@android:color/black"
+        app:boxBorderColorFocused="@android:color/holo_red_dark"
+        app:boxType="circle"
+        ></com.cocoas.view.VerifyCodeInputView>
 ```
 # 属性说明
 1. **boxWidth、boxHeight**<br/>
@@ -65,7 +74,7 @@ implementation ("com.github.CharlieJiang:VerifyCodeInputView:v1.1.2")
 
 | boxType值 | 说明 |
 | ---- | ---- |
-| line | 线型输入框（输入框底部显示一条横线） |
+| line | 线形输入框（输入框底部显示一条横线）（默认值） |
 | rect | 矩形输入框（目前只支持正方形） |
 | circle | 圆形输入框 |
 
