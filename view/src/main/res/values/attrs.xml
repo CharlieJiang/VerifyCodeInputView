@@ -13,6 +13,7 @@
         <attr name="boxType">// 输入框类型属性
             <enum name="line" value="0"/>
             <enum name="rect" value="1"/>
+            <enum name="circle" value="2"/>
         </attr>
     </declare-styleable>
 </resources>

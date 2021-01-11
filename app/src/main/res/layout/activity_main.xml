@@ -120,7 +120,7 @@
         app:boxBorderHeight="3dp"
         app:boxBorderColorNormal="@android:color/black"
         app:boxBorderColorFocused="@android:color/holo_red_dark"
-        app:boxType="rect"
+        app:boxType="circle"
         ></com.cocoas.view.VerifyCodeInputView>
 
 </LinearLayout>

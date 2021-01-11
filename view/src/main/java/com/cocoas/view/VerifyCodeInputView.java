@@ -30,6 +30,7 @@ public class VerifyCodeInputView extends AppCompatEditText {
     private interface BoxType{
         int LINE = 0;// 底部横线输入框
         int RECT = 1;// 矩形输入框
+        int CIRCLE = 2;// 圆形输入框
     }
 
     /*自定义属性↓↓↓*/
@@ -191,6 +192,9 @@ public class VerifyCodeInputView extends AppCompatEditText {
             case BoxType.RECT:// 矩形输入框
                 drawRectBox(canvas);
                 break;
+            case BoxType.CIRCLE:// 圆形输入框
+                drawCircleBox(canvas);
+                break;
             case BoxType.LINE:// 底部横线输入框
             default:
                 drawLineBox(canvas);
@@ -217,6 +221,55 @@ public class VerifyCodeInputView extends AppCompatEditText {
         canvas.drawLine(0,canvas.getHeight()/2,canvas.getWidth(),canvas.getHeight()/2,linePaint);
         //画布还原
         canvas.restoreToCount(saveCount);
+    }
+
+    /**
+     * 绘制圆形输入框
+     * @param canvas
+     */
+    private void drawCircleBox(Canvas canvas){
+        // 计算圆形坐标坐标（需要考虑画笔的宽度）
+        float cx = (boxBorderHeight + boxWidth)/2;// 圆心坐标x
+        float cy = centerY;// 圆心坐标y
+        float radius = (boxHeight - boxBorderHeight)/2;// 圆半径
+        /*创建输入框画笔*/
+        Paint boxPaint = new Paint();
+        //普通输入框颜色
+        boxPaint.setColor(boxBorderColorNormal);
+        // 设置画笔样式：描边
+        boxPaint.setStyle(Paint.Style.STROKE);
+        // 设置画笔宽度
+        boxPaint.setStrokeWidth(boxBorderHeight);
+        //当前画布保存的状态
+        int canvasSaveCount = canvas.getSaveCount();
+        //保存画布
+        canvas.save();
+        /*遍历绘制所有数字输入框*/
+        for (int i = 0; i < boxCount; i++) {
+            canvas.drawCircle(cx,cy,radius, boxPaint);
+            //计算下一个数字输入框的位置
+            int nextBoxLeft = boxWidth + boxSpacing + boxBorderHeight;
+            //保存画布
+            canvas.save();
+            //画布平移到下一个绘制输入框的位置
+            canvas.translate(nextBoxLeft, 0);
+        }
+        // 还原画布状态
+        canvas.restoreToCount(canvasSaveCount);
+        // 画布归位
+        canvas.translate(0, 0);
+        /*绘制高亮显示数字输入框*/
+        // 获取待输入数字输入框的序号
+        int boxIndex = Math.max(0, getEditableText().length());
+        // 输入完所有数字后不再绘制高亮的输入框
+        if (boxIndex < boxCount) {
+            // 计算此输入框的绘制位置
+            cx = (boxBorderHeight + boxWidth)/2 + (boxWidth + boxBorderHeight + boxSpacing) * boxIndex;
+            // 高亮显示输入框的颜色
+            boxPaint.setColor(boxBorderColorFocused);
+            // 绘制高亮输入框
+            canvas.drawCircle(cx,cy,radius, boxPaint);
+        }
     }
 
     /**

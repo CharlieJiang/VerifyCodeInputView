@@ -2,16 +2,20 @@
 # VerifyCodeInputView
 
 自定义验证码输入框，支持自定义验证码输入框的宽高、间距、数量、输入框边框的宽度、颜色，支持输入框宽度自适应。  
-目前支持两种输入框类型：矩形输入框和线型输入框。具体效果如下：
+目前支持三种输入框类型：线形输入框、矩形输入框、圆形输入框。具体效果如下：
 
 # 使用效果
-未输入数字效果
+* 线形输入框
 
-<img src="https://github.com/CharlieJiang/VerifyCodeInputView/blob/main/screenshot/UseCase_not_input.jpg" alt="使用效果图——未输入" width="720" height="1280" align="middle"/>
+<img src="https://github.com/CharlieJiang/VerifyCodeInputView/blob/main/screenshot/line.jpg" alt="线形输入框" width="720" height="1280" align="middle"/>
 
-输入数字后效果
+* 矩形输入框
 
-<img src="https://github.com/CharlieJiang/VerifyCodeInputView/blob/main/screenshot/UseCase_input.jpg" alt="使用效果图——已输入" width="720" height="1280" align="middle"/>
+<img src="https://github.com/CharlieJiang/VerifyCodeInputView/blob/main/screenshot/rect.jpg" alt="矩形输入框" width="720" height="1280" align="middle"/>
+
+* 圆形输入框
+
+<img src="https://github.com/CharlieJiang/VerifyCodeInputView/blob/main/screenshot/circle.jpg" alt="圆形输入框" width="720" height="1280" align="middle"/>
 
 # 引用方式
 * 添加JitPack仓库<br/>
@@ -27,7 +31,7 @@ allprojects {
 * 添加项目依赖<br/>
 在需要调用的module的build.gradle中添加依赖：
 ```css
-implementation ("com.github.CharlieJiang:VerifyCodeInputView:v1.1.1")
+implementation ("com.github.CharlieJiang:VerifyCodeInputView:v1.1.2")
 ```
 * 在xml布局中引用
 ```xml
@@ -63,5 +67,6 @@ implementation ("com.github.CharlieJiang:VerifyCodeInputView:v1.1.1")
 | ---- | ---- |
 | line | 线型输入框（输入框底部显示一条横线） |
 | rect | 矩形输入框（目前只支持正方形） |
+| circle | 圆形输入框 |
 
 
